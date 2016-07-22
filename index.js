@@ -1,4 +1,4 @@
-var Resource = require('feather-resource');
+var Resource = require('feather2-resource');
 
 function isEmpty(obj){
     for(var i in obj){
@@ -40,8 +40,6 @@ module.exports = function(ret){
         delete combo.use;
         options.combo = combo;
     }
-
-    console.log(ret.map);return;
 
     Resource.init(ret.map, options);
 
