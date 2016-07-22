@@ -41,6 +41,8 @@ module.exports = function(ret){
         options.combo = combo;
     }
 
+    console.log(ret.map);return;
+
     Resource.init(ret.map, options);
 
     feather.util.map(ret.ids, function(id, file){
