@@ -34,17 +34,16 @@ function joinSrc(info){
 }
 
 module.exports = function(ret){
-    var options = {}, combo = feather.config.get('combo');
+    var options = {}, autoPack = feather.config.get('autoPack.type');
 
-    if(combo.use){
-        delete combo.use;
-        options.combo = combo;
+    if(autoPack == 'combo'){
+        options.combo = feather.config.get('autoPack.options');
     }
 
     Resource.init(ret.map, options);
 
     feather.util.map(ret.ids, function(id, file){
-        if(file.isHtmlLike && !file.isWidget){
+        if(file.isHtmlLike){
             var info = Resource.getResourceInfo(id), content = file.getContent();
             var srcs = joinSrc(info);
 
