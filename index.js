@@ -40,11 +40,12 @@ module.exports = function(ret){
         options.combo = feather.config.get('autoPack.options');
     }
 
-    Resource.init(ret.map, options);
+    var ResourceObject = new Resource(ret.map, options);
 
-    feather.util.map(ret.ids, function(id, file){
+    feather.util.map(ret.src, function(subpath, file){
         if(file.isHtmlLike){
-            var info = Resource.getResourceInfo(id), content = file.getContent();
+            var id = file.id;
+            var info = ResourceObject.getResourceInfo(id), content = file.getContent();
             var srcs = joinSrc(info);
 
             if(/<\/head>/.test(content)){
@@ -64,10 +65,12 @@ module.exports = function(ret){
             }
 
             if(file.isPagelet){
-                content = content.replace(/"##PLACEHOLDER_PAGELET_ASYNCS:[\s\S]+?##"/, JSON.stringify(info.pageletAsyncs));
+                content = content.replace(/\/\*PAGELET_ASYNCS_PLACEHOLDER:[\s\S]+?\*\//, (
+                    JSON.stringify(info.pageletAsyncs) || '').slice(1, -1));
             }
 
             file.setContent(content);
+            ret.pkg[subpath] = file;
         }
     });
 }; 
