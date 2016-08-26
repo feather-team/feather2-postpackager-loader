@@ -19,10 +19,6 @@ function joinSrc(info){
         head += '<script src="' + script + '"></script>';
     });
 
-    if(!isEmpty(info.requires.map)){
-        head += '<script>require.config(' + JSON.stringify(info.requires) + ')</script>';
-    }
-
     info.threeUrls.bottomJs.forEach(function(script){
         bottom += '<script src="' + script + '"></script>';
     });
@@ -46,6 +42,14 @@ module.exports = function(ret){
         if(file.isHtmlLike){
             var id = file.id;
             var info = ResourceObject.getResourceInfo(id), content = file.getContent();
+
+            if(!isEmpty(info.requires.map)){
+                var mapFile = feather.file.wrap(feather.project.getProjectPath() + '/static/m_/' + feather.util.md5(subpath, 7) + '.js');
+                mapFile.setContent('require.config(' + JSON.stringify(info.requires) + ');');
+                ret.pkg[mapFile.subpath] = mapFile;
+                info.threeUrls.headJs.push(mapFile.getUrl());
+            }
+
             var srcs = joinSrc(info);
 
             if(/<\/head>/.test(content)){
