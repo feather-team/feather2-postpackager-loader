@@ -70,7 +70,7 @@ module.exports = function(ret){
                     return srcs.bottom + all;
                 });
             }else{
-                content = srcs.bottom + content;
+                content = content + srcs.bottom;
             }
 
             if(file.isPagelet){
