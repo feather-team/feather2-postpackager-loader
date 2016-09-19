@@ -8,7 +8,7 @@ function isEmpty(obj){
     return true;
 }
 
-function joinSrc(info){
+function joinSrc(info, pagelet){
     var head = '', bottom = '';
 
     info.threeUrls.css.forEach(function(link){
@@ -19,7 +19,7 @@ function joinSrc(info){
         head += '<script src="' + script + '"></script>';
     });
 
-    if(info.requires){
+    if(info.requires && pagelet){
         head += '<script>require.config(' + JSON.stringify(info.requires) + ')</script>';
     }
 
@@ -55,7 +55,7 @@ module.exports = function(ret){
                 delete info.requires;
             }
 
-            var srcs = joinSrc(info);
+            var srcs = joinSrc(info, file.isPagelet);
 
             if(/<\/head>/.test(content)){
                 content = content.replace(/<\/head>/, function(all){
