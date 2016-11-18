@@ -57,17 +57,17 @@ module.exports = function(ret){
 
             var srcs = joinSrc(info, file.isPagelet);
 
-            if(/<\/head>/.test(content)){
-                content = content.replace(/<\/head>/, function(all){
-                    return srcs.head + all;
+            if(/<!--(?:FEATHER )?STATIC POSITION:HEAD-->|<\/head>/i.test(content)){
+                content = content.replace(/<!--(?:FEATHER )?STATIC POSITION:HEAD-->|(<\/head>)/i, function(all, tag){
+                    return srcs.head + (tag || '');
                 });
             }else{
                 content = srcs.head + content;
             }
 
-            if(/<\/body>/.test(content)){
-                content = content.replace(/<\/body>/, function(all){
-                    return srcs.bottom + all;
+            if(/<!--(?:FEATHER )?STATIC POSITION:BOTTOM-->|<\/body>/i.test(content)){
+                content = content.replace(/<!--(?:FEATHER )?STATIC POSITION:BOTTOM-->|(<\/body>)/i, function(all, tag){
+                    return srcs.bottom + (tag || '');
                 });
             }else{
                 content = content + srcs.bottom;
